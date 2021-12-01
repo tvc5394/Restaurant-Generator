@@ -1,0 +1,132 @@
+from tkinter import *
+from tkinter import ttk
+
+
+def btn_homewood_press():
+    # insert web scraping
+    buttons_pressed = 1
+    print('homewood')
+
+
+def btn_peabody_press():
+    # insert web scraping
+    buttons_pressed = 1
+    print('peabody')
+
+
+def btn_med_press():
+    # insert web scraping
+    buttons_pressed = 1
+    print('med')
+
+
+def btn_murica_press():
+    # insert web scraping
+    buttons_pressed = 2
+    print('american')
+
+
+def btn_mex_press():
+    # insert web scraping
+    buttons_pressed = 2
+    print('mexican')
+    btn_chn.grid_forget()
+
+
+def btn_ind_press():
+    # insert web scraping
+    buttons_pressed = 2
+    print('indian')
+
+
+def btn_chn_press():
+    # insert web scraping
+    buttons_pressed = 2
+    print('chinese')
+
+
+def btn_back_press():
+    if buttons_pressed == 0:
+        ttk.Label(frm, text="Q1: Which JHU campus are you closest to?").grid(
+            column=0, row=4)
+        master.geometry('500x500')
+        btn_homewood = Button(frm, text='Homewood', bd='5',
+                              command=btn_homewood_press).grid(column=0, row=6)
+        btn_peabody = Button(frm, text='Peabody', bd='5',
+                             command=btn_peabody_press).grid(column=0, row=8)
+        btn_med = Button(frm, text='Medical', bd='5',
+                         command=btn_med_press).grid(column=0, row=10)
+        btn_exit = Button(frm, text='Exit', bd='5',
+                          command=master.destroy).grid(column=0, row=16)
+        btn_back = Button(frm, text='Go Back to Previous Question', bd='5',
+                          command=master.withdraw).grid(column=0, row=18)
+        btn_reset = Button(frm, text='Reset', bd='5',
+                           command=master.destroy).grid(column=0, row=20)
+    if buttons_pressed == 2:
+        ttk.Label(frm, text="Q2: Which regional cousine would you like?").grid(
+            column=0, row=4)
+        master.geometry('500x500')
+        btn_murica = Button(frm, text='American', bd='5',
+                            command=btn_murica_press).grid(column=0, row=6)
+        btn_mex = Button(frm, text='Mexican', bd='5',
+                         command=btn_mex_press).grid(column=0, row=8)
+        btn_ind = Button(frm, text='Indian', bd='5',
+                         command=btn_ind_press).grid(column=0, row=10)
+        btn_chn = Button(frm, text='Chinese', bd='5',
+                         command=btn_chn_press).grid(column=0, row=12)
+        btn_exit = Button(frm, text='Exit', bd='5',
+                          command=master.destroy).grid(column=0, row=16)
+        btn_back = Button(frm, text='Go Back to Previous Question', bd='5',
+                          command=master.withdraw).grid(column=0, row=18)
+        btn_reset = Button(frm, text='Reset', bd='5',
+                           command=master.destroy).grid(column=0, row=20)
+
+
+master = Tk()
+frm = ttk.Frame(master, padding=10)
+frm.grid()
+
+ttk.Label(frm, text="Welcome to your Baltimore Restaurant Guide!").grid(
+    column=0, row=0)
+ttk.Label(frm, text="You will be presented with a series of questions to find the restaurant that best fits your cravings").grid(
+    column=0, row=2)
+buttons_pressed = 0
+
+
+# Question 1
+ttk.Label(frm, text="Q1: Which JHU campus are you closest to?").grid(
+    column=0, row=4)
+master.geometry('500x500')
+btn_homewood = Button(frm, text='Homewood', bd='5',
+                      command=btn_homewood_press).grid(column=0, row=6)
+btn_peabody = Button(frm, text='Peabody', bd='5',
+                     command=btn_peabody_press).grid(column=0, row=8)
+btn_med = Button(frm, text='Medical', bd='5',
+                 command=btn_med_press).grid(column=0, row=10)
+btn_exit = Button(frm, text='Exit', bd='5',
+                  command=master.destroy).grid(column=0, row=16)
+btn_back = Button(frm, text='Go Back to Previous Question', bd='5',
+                  command=btn_back_press).grid(column=0, row=18)
+btn_reset = Button(frm, text='Reset', bd='5',
+                   command=master.destroy).grid(column=0, row=20)
+
+
+# Question 2
+ttk.Label(frm, text="Q2: Which regional cousine would you like?").grid(
+    column=0, row=4)
+master.geometry('500x500')
+btn_murica = Button(frm, text='American', bd='5',
+                    command=btn_murica_press).grid(column=0, row=6)
+btn_mex = Button(frm, text='Mexican', bd='5',
+                 command=btn_mex_press).grid(column=0, row=8)
+btn_ind = Button(frm, text='Indian', bd='5',
+                 command=btn_ind_press).grid(column=0, row=10)
+btn_chn = Button(frm, text='Chinese', bd='5',
+                 command=btn_chn_press).grid(column=0, row=12)
+btn_exit = Button(frm, text='Exit', bd='5',
+                  command=master.destroy).grid(column=0, row=16)
+btn_back = Button(frm, text='Go Back to Previous Question', bd='5',
+                  command=btn_back_press).grid(column=0, row=18)
+btn_reset = Button(frm, text='Reset', bd='5',
+                   command=master.destroy).grid(column=0, row=20)
+master.mainloop()
