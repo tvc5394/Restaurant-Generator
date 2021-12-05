@@ -133,42 +133,53 @@ class Cuisine(tk.Frame):
         # insert web scraping
         print('chinese')
 
-if __name__ == '__main__':
-    app = MyCommands()
-    app.mainloop()
-    # if user clicks
-    
-    # step 1 - search on Google
+
+def webscrape(answers):
+    '''
+    This function returns the restaurants that are found on Google
+    based on the user's selection.
+    input: location and preferred food category *list*
+    output: restaurant names *list*
+    '''
+
+    # search on Google
     url = "https://www.google.com/"
-    driver_path = join(getcwd(), 'chromedriver')
+    driver_path = join(getcwd(), 'chromedriver')  # get chrome driver
     driver = Chrome(driver_path)
     driver.get(url)
 
     wait = WebDriverWait(driver, 15)
     wait.until(EC.element_to_be_clickable((By.NAME, 'q')))
 
-    search = 'jhu restaurant' + str(input1) + str(input2) # location and food category
-
+    # enter the key words in search bar
+    search = 'jhu homewood restaurant' + ' ' + str(answers[0]) + ' ' + str(answers[1])
     loc_search_box = driver.find_element_by_name('q')
     loc_search_box.send_keys(search)
-
     loc_search_box.send_keys(Keys.ENTER)
 
     sleep(3)
 
     # click "more" from google results
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'MXl0lf.tKtwEb.wHYlTd')))                                             
+    wait.until(EC.element_to_be_clickable((
+        By.CLASS_NAME, 'MXl0lf.tKtwEb.wHYlTd')))
     loc_more = driver.find_element_by_class_name('MXl0lf.tKtwEb.wHYlTd')
     loc_more.click()
 
     sleep(3)
 
     # get the restaurant names
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'dbg0pd.OSrXXb.eDIkBe')))
+    wait.until(EC.element_to_be_clickable((
+        By.CLASS_NAME, 'dbg0pd.OSrXXb.eDIkBe')))
     names = driver.find_elements_by_class_name('dbg0pd.OSrXXb.eDIkBe')
     restaurants = []
     for elem in names:
-    restaurants.append((elem.text)) # convert WebElement to text and append to list
+        # convert WebElement to text and append to list
+        restaurants.append((elem.text))
+
+    return restaurants
 
 
-    
+if __name__ == '__main__':
+    app = MyCommands()
+    app.mainloop()
+    print(webscrape(ans))
