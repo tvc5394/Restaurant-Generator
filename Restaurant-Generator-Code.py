@@ -133,8 +133,42 @@ class Cuisine(tk.Frame):
         # insert web scraping
         print('chinese')
 
-
 if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
+    # if user clicks
+    
+    # step 1 - search on Google
+    url = "https://www.google.com/"
+    driver_path = join(getcwd(), 'chromedriver')
+    driver = Chrome(driver_path)
+    driver.get(url)
+
+    wait = WebDriverWait(driver, 15)
+    wait.until(EC.element_to_be_clickable((By.NAME, 'q')))
+
+    search = 'jhu restaurant' + str(input1) + str(input2) # location and food category
+
+    loc_search_box = driver.find_element_by_name('q')
+    loc_search_box.send_keys(search)
+
+    loc_search_box.send_keys(Keys.ENTER)
+
+    sleep(3)
+
+    # click "more" from google results
+    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'MXl0lf.tKtwEb.wHYlTd')))                                             
+    loc_more = driver.find_element_by_class_name('MXl0lf.tKtwEb.wHYlTd')
+    loc_more.click()
+
+    sleep(3)
+
+    # get the restaurant names
+    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'dbg0pd.OSrXXb.eDIkBe')))
+    names = driver.find_elements_by_class_name('dbg0pd.OSrXXb.eDIkBe')
+    restaurants = []
+    for elem in names:
+    restaurants.append((elem.text)) # convert WebElement to text and append to list
+
+
     
