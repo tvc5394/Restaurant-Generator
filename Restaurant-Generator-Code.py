@@ -42,7 +42,7 @@ class MyCommands(tk.Tk):
 
         frame = self.frames[cont]
         frame.tkraise()
-        
+
 
 class StartPage(tk.Frame):
 
@@ -58,8 +58,7 @@ class StartPage(tk.Frame):
         button = tk.Button(self, text="Let's Start!",
                            command=lambda: controller.show_frame(Location))
         button.pack()
-        
-        
+
 class Location(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -146,6 +145,8 @@ class Rating(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.label_error = tk.Label(self, text="Please enter a value.")
         label = tk.Label(
             self, text="Question 3: What is the minimum Google reviews rating of your desired restaurant?")
         label.pack(pady=10, padx=10)
@@ -155,13 +156,13 @@ class Rating(tk.Frame):
         rating_input = tk.Text(self, height=1, width=5)
         rating_input.pack()
         btn_rating_enter = Button(
-            self, text='Enter', bd='5', command=lambda: self.btn_rating_enter_press(rating_input))
+            self, text='Enter', bd='5', command=lambda: [self.label_error.pack_forget(), self.btn_rating_enter_press(rating_input)])
         btn_rating_enter.pack()
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
         btn_reset = Button(self, text='Reset', bd='5',
-                           command=lambda: [controller.show_frame(StartPage), answers_given.clear()])
+                           command=lambda: [self.controller.show_frame(StartPage), answers_given.clear()])
         btn_reset.pack(pady=10, padx=10)
 
     def btn_rating_enter_press(self, rating_input):
@@ -170,14 +171,17 @@ class Rating(tk.Frame):
         try:
             rating_answer = float(rating_answer)
         except:
-            label = tk.Label(self, text="Please enter a value.")
-            label.pack(pady=10, padx=10)
+            self.label_error.pack(pady=10, padx=10)
             rating_input.delete(1.0, "end")
         else:
-            answers_given.append(rating_answer)
-            print(answers_given)
-            rating_input.delete(1.0, "end")
-            # EndPage(parent, controller)
+            if rating_answer <= 5:
+                answers_given.append(rating_answer)
+                print(answers_given)
+                self.controller.show_frame(EndPage)
+                rating_input.delete(1.0, "end")
+            else:
+                self.label_error.pack(pady=10, padx=10)
+                rating_input.delete(1.0, "end")
         # insert web scraping
 
 
@@ -198,7 +202,7 @@ class Results(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="See your results below:")
         label.pack(pady=10, padx=10)
-
+        
         
 def webscrape(answers):
     '''
