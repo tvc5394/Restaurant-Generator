@@ -66,30 +66,30 @@ class Location(tk.Frame):
             self, text="Question 1: Which JHU campus are you closest to?")
         label.pack(pady=10, padx=10)
         btn_homewood = Button(self, text='Homewood', bd='5',
-                              command=lambda: [controller.show_frame(Cuisine), self.btn_homewood_press()])
+                              command=lambda: [controller.show_frame(Cuisine),
+                                               self.btn_homewood_press()])
         btn_homewood.pack(pady=10, padx=10)
         btn_peabody = Button(self, text='Peabody', bd='5',
-                             command=lambda: [controller.show_frame(Cuisine), self.btn_peabody_press()])
+                             command=lambda: [controller.show_frame(Cuisine),
+                                              self.btn_peabody_press()])
         btn_peabody.pack(pady=10, padx=10)
         btn_med = Button(self, text='Medical', bd='5',
-                         command=lambda: [controller.show_frame(Cuisine), self.btn_med_press()])
+                         command=lambda: [controller.show_frame(Cuisine),
+                                          self.btn_med_press()])
         btn_med.pack(pady=10, padx=10)
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
 
     def btn_homewood_press(self):
-        # insert web scraping
         answers_given.append("Homewood")
         print(answers_given)
 
     def btn_peabody_press(self):
-        # insert web scraping
         answers_given.append("Peabody")
         print(answers_given)
 
     def btn_med_press(self):
-        # insert web scraping
         answers_given.append("Medical")
         print(answers_given)
 
@@ -102,41 +102,42 @@ class Cuisine(tk.Frame):
             self, text="Question 2: Which regional cousine would you like?")
         label.pack(pady=10, padx=10)
         btn_murica = Button(self, text='American', bd='5',
-                            command=lambda: [controller.show_frame(Rating), self.btn_murica_press()])
+                            command=lambda: [controller.show_frame(Rating),
+                                             self.btn_murica_press()])
         btn_murica.pack(pady=10, padx=10)
         btn_mex = Button(self, text='Mexican', bd='5',
-                         command=lambda: [controller.show_frame(Rating), self.btn_mex_press()])
+                         command=lambda: [controller.show_frame(Rating),
+                                          self.btn_mex_press()])
         btn_mex.pack(pady=10, padx=10)
         btn_ind = Button(self, text='Indian', bd='5',
-                         command=lambda: [controller.show_frame(Rating), self.btn_ind_press()])
+                         command=lambda: [controller.show_frame(Rating),
+                                          self.btn_ind_press()])
         btn_ind.pack(pady=10, padx=10)
         btn_chn = Button(self, text='Chinese', bd='5',
-                         command=lambda: [controller.show_frame(Rating), self.btn_chn_press()])
+                         command=lambda: [controller.show_frame(Rating),
+                                          self.btn_chn_press()])
         btn_chn.pack(pady=10, padx=10)
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
         btn_reset = Button(self, text='Reset', bd='5',
-                           command=lambda: [controller.show_frame(StartPage), answers_given.clear()])
+                           command=lambda: [controller.show_frame(StartPage),
+                                            answers_given.clear()])
         btn_reset.pack(pady=10, padx=10)
 
     def btn_murica_press(self):
-        # insert web scraping
         answers_given.append("American")
         print(answers_given)
 
     def btn_mex_press(self):
-        # insert web scraping
         answers_given.append("Mexican")
         print(answers_given)
 
     def btn_ind_press(self):
-        # insert web scraping
         answers_given.append("Indian")
         print(answers_given)
 
     def btn_chn_press(self):
-        # insert web scraping
         answers_given.append("Chinese")
         print(answers_given)
 
@@ -145,31 +146,36 @@ class Rating(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.label_error = tk.Label(self, text="Please enter a value.")
+        self.label_error = tk.Label(self, text="Please enter a valid value.")
         label = tk.Label(
-            self, text="Question 3: What is the minimum Google reviews rating of your desired restaurant?")
+            self, text="Question 3: What is the minimum Google reviews "
+            "rating of your desired restaurant?")
         label.pack(pady=10, padx=10)
         label = tk.Label(
-            self, text="Please enter a value equal to or less than 5. Decimal points accepted.")
+            self, text="Please enter a value equal to or less than 5. "
+            "Decimal points accepted.")
         label.pack(pady=10, padx=10)
         rating_input = tk.Text(self, height=1, width=5)
         rating_input.pack()
         btn_rating_enter = Button(
-            self, text='Enter', bd='5', command=lambda: [self.label_error.pack_forget(), self.btn_rating_enter_press(rating_input)])
+            self, text='Enter', bd='5',
+            command=lambda: [self.label_error.pack_forget(),
+                             self.btn_enter_press(rating_input)])
         btn_rating_enter.pack()
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
-        btn_reset = Button(self, text='Reset', bd='5',
-                           command=lambda: [self.controller.show_frame(StartPage), answers_given.clear()])
+        btn_reset = Button(self, text='Reset', bd='5', command=lambda:
+                           [self.controller.show_frame(StartPage),
+                            answers_given.clear()])
         btn_reset.pack(pady=10, padx=10)
 
-    def btn_rating_enter_press(self, rating_input):
+    def btn_enter_press(self, rating_input):
         rating_answer = rating_input.get(1.0, "end")
         rating_answer = rating_answer.strip('\n')
         try:
             rating_answer = float(rating_answer)
-        except:
+        except ValueError:
             self.label_error.pack(pady=10, padx=10)
             rating_input.delete(1.0, "end")
         else:
@@ -181,7 +187,6 @@ class Rating(tk.Frame):
             else:
                 self.label_error.pack(pady=10, padx=10)
                 rating_input.delete(1.0, "end")
-        # insert web scraping
 
 
 class EndPage(tk.Frame):
@@ -189,7 +194,8 @@ class EndPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(
-            self, text="Thank you for answering the questions. Click below to submit.")
+            self, text="Thank you for answering the questions. "
+            "Click below to submit.")
         label.pack(pady=10, padx=10)
         button = tk.Button(self, text="I'm done! Get me my results!",
                            command=lambda: controller.show_frame(Results))
@@ -201,6 +207,9 @@ class Results(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="See your results below:")
         label.pack(pady=10, padx=10)
+        btn_exit = Button(self, text='Exit', bd='5',
+                          command=self.quit)
+        btn_exit.pack(pady=10, padx=10)
         
         
 def webscrape(answers):
