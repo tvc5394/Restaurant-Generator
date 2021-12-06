@@ -14,6 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from requests import get
 
+answers_given = []
 
 class MyCommands(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -27,7 +28,7 @@ class MyCommands(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, Location, Cuisine):
+        for F in (StartPage, Location, Cuisine, Rating, EndPage, Results):
 
             frame = F(container, self)
 
@@ -41,23 +42,24 @@ class MyCommands(tk.Tk):
 
         frame = self.frames[cont]
         frame.tkraise()
-
+        
 
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label1 = tk.Label(
+        label = tk.Label(
             self, text="Welcome to your Baltimore Restaurant Guide!")
-        label1.pack(pady=10, padx=10)
-        label2 = tk.Label(
+        label.pack(pady=10, padx=10)
+        label = tk.Label(
             self, text="Find the restaurant that best caters your cravings!")
-        label2.pack(pady=10, padx=10)
+        label.pack(pady=10, padx=10)
 
         button = tk.Button(self, text="Let's Start!",
                            command=lambda: controller.show_frame(Location))
         button.pack()
-
+        
+        
 class Location(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -80,15 +82,18 @@ class Location(tk.Frame):
 
     def btn_homewood_press(self):
         # insert web scraping
-        print('homewood')
+        answers_given.append("Homewood")
+        print(answers_given)
 
     def btn_peabody_press(self):
         # insert web scraping
-        print('peabody')
+        answers_given.append("Peabody")
+        print(answers_given)
 
     def btn_med_press(self):
         # insert web scraping
-        print('med')
+        answers_given.append("Medical")
+        print(answers_given)
 
 
 class Cuisine(tk.Frame):
@@ -99,41 +104,102 @@ class Cuisine(tk.Frame):
             self, text="Question 2: Which regional cousine would you like?")
         label.pack(pady=10, padx=10)
         btn_murica = Button(self, text='American', bd='5',
-                            command=lambda: self.btn_murica_press())
+                            command=lambda: [controller.show_frame(Rating), self.btn_murica_press()])
         btn_murica.pack(pady=10, padx=10)
         btn_mex = Button(self, text='Mexican', bd='5',
-                         command=lambda: self.btn_mex_press())
+                         command=lambda: [controller.show_frame(Rating), self.btn_mex_press()])
         btn_mex.pack(pady=10, padx=10)
         btn_ind = Button(self, text='Indian', bd='5',
-                         command=lambda: self.btn_ind_press())
+                         command=lambda: [controller.show_frame(Rating), self.btn_ind_press()])
         btn_ind.pack(pady=10, padx=10)
         btn_chn = Button(self, text='Chinese', bd='5',
-                         command=lambda: self.btn_chn_press())
+                         command=lambda: [controller.show_frame(Rating), self.btn_chn_press()])
         btn_chn.pack(pady=10, padx=10)
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
         btn_reset = Button(self, text='Reset', bd='5',
-                           command=lambda: controller.show_frame(StartPage))
+                           command=lambda: [controller.show_frame(StartPage), answers_given.clear()])
         btn_reset.pack(pady=10, padx=10)
 
     def btn_murica_press(self):
         # insert web scraping
-        print('american')
+        answers_given.append("American")
+        print(answers_given)
 
     def btn_mex_press(self):
         # insert web scraping
-        print('mexican')
+        answers_given.append("Mexican")
+        print(answers_given)
 
     def btn_ind_press(self):
         # insert web scraping
-        print('indian')
+        answers_given.append("Indian")
+        print(answers_given)
 
     def btn_chn_press(self):
         # insert web scraping
-        print('chinese')
+        answers_given.append("Chinese")
+        print(answers_given)
+
+class Rating(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(
+            self, text="Question 3: What is the minimum Google reviews rating of your desired restaurant?")
+        label.pack(pady=10, padx=10)
+        label = tk.Label(
+            self, text="Please enter a value equal to or less than 5. Decimal points accepted.")
+        label.pack(pady=10, padx=10)
+        rating_input = tk.Text(self, height=1, width=5)
+        rating_input.pack()
+        btn_rating_enter = Button(
+            self, text='Enter', bd='5', command=lambda: self.btn_rating_enter_press(rating_input))
+        btn_rating_enter.pack()
+        btn_exit = Button(self, text='Exit', bd='5',
+                          command=self.quit)
+        btn_exit.pack(pady=10, padx=10)
+        btn_reset = Button(self, text='Reset', bd='5',
+                           command=lambda: [controller.show_frame(StartPage), answers_given.clear()])
+        btn_reset.pack(pady=10, padx=10)
+
+    def btn_rating_enter_press(self, rating_input):
+        rating_answer = rating_input.get(1.0, "end")
+        rating_answer = rating_answer.strip('\n')
+        try:
+            rating_answer = float(rating_answer)
+        except:
+            label = tk.Label(self, text="Please enter a value.")
+            label.pack(pady=10, padx=10)
+            rating_input.delete(1.0, "end")
+        else:
+            answers_given.append(rating_answer)
+            print(answers_given)
+            rating_input.delete(1.0, "end")
+            # EndPage(parent, controller)
+        # insert web scraping
 
 
+class EndPage(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(
+            self, text="Thank you for answering the questions. Click below to submit.")
+        label.pack(pady=10, padx=10)
+        button = tk.Button(self, text="I'm done! Get me my results!",
+                           command=lambda: controller.show_frame(Results))
+        button.pack(pady=10, padx=10)
+
+
+class Results(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="See your results below:")
+        label.pack(pady=10, padx=10)
+
+        
 def webscrape(answers):
     '''
     This function returns the restaurants that are found on Google
