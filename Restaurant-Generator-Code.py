@@ -271,7 +271,8 @@ def webscrape(answers):
     sleep(3)
 
     # click "restaurants" from Google results
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'uEubGf.gm2-subtitle-alt-2')))
+    wait.until(EC.element_to_be_clickable(
+        (By.CLASS_NAME, 'uEubGf.gm2-subtitle-alt-2')))
     restaurant = driver.find_element_by_class_name('uEubGf.gm2-subtitle-alt-2')
     restaurant.click()
 
@@ -285,14 +286,13 @@ def webscrape(answers):
     box.send_keys(Keys.ENTER)
 
     # wait until elements are clickable to fetch the restaurant names
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'qBF1Pd.gm2-subtitle-alt-1')))
+    wait.until(EC.element_to_be_clickable(
+        (By.CLASS_NAME, 'qBF1Pd.gm2-subtitle-alt-1')))
     sleep(3)
     res = driver.find_elements_by_class_name('qBF1Pd.gm2-subtitle-alt-1')
     rating = driver.find_elements_by_class_name('ZkP5Je')
-    link = driver.find_elements_by_class_name('a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
-
-    restaurants = []
-    ratings = []
+    link = driver.find_elements_by_class_name(
+        'a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
 
     # get the restaurant names
     # convert WebElement to str and append to list
@@ -307,6 +307,17 @@ def webscrape(answers):
     # get the hyperlinks
     links = [elem.get_attribute('href') for elem in link]
 
+    # discard restaurants below a certain rating
+    index = [i for i, v in enumerate(ratings) if float(v) < float(answers[2])]
+
+    # delete the unwanted elements for all three lists
+    # need to reverse it so the rest of the indecies
+    # we refer to will remain the same
+    for elem in sorted(index, reverse=True):
+        del restaurants[elem]
+        del ratings[elem]
+        del links[elem]
+
     # close Chrome
     driver.close()
 
@@ -317,17 +328,3 @@ if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
     print(webscrape(answers_given))
-    # below is the possible output!
-    txt = ['Shun Lee Chinese Carry Out',
-  'Ma Wongs Carryout',
-  'Good Day Chinese Food Carry',
-  'China Kitchen Rest',
-  'Orient Express',
-  'Mayflower Chinese Restaurant'],
- ['4.4', '4.2', '4.2', '3.8', '4.0', '3.8'],
- ['https://www.google.com/maps/place/Shun+Lee+Chinese+Carry+Out/data=!4m5!3m4!1s0x89c8051d087c3c55:0xf6cad41f1b52cf65!8m2!3d39.3299728!4d-76.6091796?authuser=0&hl=en&rclk=1',
-  'https://www.google.com/maps/place/Ma+Wongs+Carryout/data=!4m5!3m4!1s0x89c805124c46aecd:0xee2b8ffd8ecbc815!8m2!3d39.345081!4d-76.609251?authuser=0&hl=en&rclk=1',
-  'https://www.google.com/maps/place/Good+Day+Chinese+Food+Carry/data=!4m5!3m4!1s0x89c804564a3c19b1:0xd806637e213fdb7d!8m2!3d39.3188363!4d-76.5934137?authuser=0&hl=en&rclk=1',
-  'https://www.google.com/maps/place/China+Kitchen+Rest/data=!4m5!3m4!1s0x89c8045bb11fd9ab:0x19b827b902b60bfd!8m2!3d39.3122711!4d-76.5873689?authuser=0&hl=en&rclk=1',
-  'https://www.google.com/maps/place/Orient+Express/data=!4m5!3m4!1s0x89c804e0ff605d8f:0x456daf14c8a11e20!8m2!3d39.3262635!4d-76.6156436?authuser=0&hl=en&rclk=1',
-  'https://www.google.com/maps/place/Mayflower+Chinese+Restaurant/data=!4m5!3m4!1s0x89c8051d05e2c5ad:0xb9cce9c7fdab5660!8m2!3d39.330051!4d-76.6090326?authuser=0&hl=en&rclk=1'])
