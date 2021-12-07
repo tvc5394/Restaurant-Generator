@@ -15,6 +15,7 @@ from requests import get
 
 answers_given = []
 
+
 class MyCommands(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -27,7 +28,8 @@ class MyCommands(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, Location, Cuisine, Rating, EndPage, Results):
+        for F in (StartPage, Location, EnterAddress,
+                  Cuisine, Rating, EndPage, Results):
 
             frame = F(container, self)
 
@@ -77,6 +79,10 @@ class Location(tk.Frame):
                          command=lambda: [controller.show_frame(Cuisine),
                                           self.btn_med_press()])
         btn_med.pack(pady=10, padx=10)
+        btn_none = Button(self, text='None! I want to enter an address.',
+                          bd='5', command=lambda:
+                          controller.show_frame(EnterAddress))
+        btn_none.pack(pady=10, padx=10)
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
@@ -92,7 +98,6 @@ class Location(tk.Frame):
     def btn_med_press(self):
         answers_given.append("Medical")
         print(answers_given)
-
 
 class Cuisine(tk.Frame):
 
@@ -140,6 +145,29 @@ class Cuisine(tk.Frame):
     def btn_chn_press(self):
         answers_given.append("Chinese")
         print(answers_given)
+
+
+class EnterAddress(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Please enter a "
+                         " valid address/location/area name, "
+                         "similar to how you would in Google.", bd='5')
+        label.pack(pady=10, padx=10)
+        address_input = tk.Text(self, height=2, width=20)
+        address_input.pack(pady=10, padx=10)
+        btn_address_enter = Button(self, text="Enter", bd='5',
+                                   command=lambda:
+                                   [self.btn_add_press(address_input),
+                                    controller.show_frame(Cuisine)])
+        btn_address_enter.pack(pady=10, padx=10)
+
+    def btn_add_press(self, address_input):
+        address_answer = address_input.get(1.0, "end")
+        address_answer = address_answer.strip('\n')
+        answers_given.append(address_answer)
+
 
 class Rating(tk.Frame):
 
@@ -216,13 +244,11 @@ def webscrape(answers):
     '''
     This function will open Chrome and search on Google Maps
     to find nearby restaurants.
-
     **Parameters**
         answers: *list
             First str: the location to search for nearby restaurants
             Second str: the type of cuision you prefer
             Third str: the minimum value of rating the restaurant needs to have
-
     **Returns**
         restaurants: *list
             A list of all the restaurants found
