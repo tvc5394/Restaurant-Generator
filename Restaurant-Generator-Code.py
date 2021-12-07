@@ -210,54 +210,108 @@ class Results(tk.Frame):
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
-        
-        
+
+
 def webscrape(answers):
     '''
-    This function returns the restaurants that are found on Google
-    based on the user's selection.
-    input: location and preferred food category *list*
-    output: restaurant names *list*
+    This function will open Chrome and search on Google Maps to find restaurants. 
+    
+
+    **Parameters**
+        answers: *list
+            First string inside the list is the location where you would like to search for restaurants,
+            the second string is the type of cuision you prefer, and the last string is the minimum value
+            of ratings the restaurant needs to have.
+
+    **Returns**
+        restaurants: *list
+            A list of all the restaurants found
+        ratings: *list
+            A list of the ratings of each restaurants
+        links: *list
+            A list of the hyperlinks of each restaurants
     '''
 
-    # search on Google
-    url = "https://www.google.com/"
-    driver_path = join(getcwd(), 'chromedriver')  # get chrome driver
+    # open Google Maps with Chrome driver
+    url = 'https://maps.google.com/'
+    # we are getting the chrome driver here
+    # make sure the chrome driver is in the same folder as this code
+    # and is named as "chromedriver"
+    driver_path = join(getcwd(), 'chromedriver')
     driver = Chrome(driver_path)
+    # open the Google page
     driver.get(url)
-
+    
+    # Timeout Exception if search bar not clickable in 15 seconds
     wait = WebDriverWait(driver, 15)
+    # the search bar name is 'q'
+    # waiting until the search bar is clickable
     wait.until(EC.element_to_be_clickable((By.NAME, 'q')))
+    
+    if answers[0] == 'Homewood':
+        address = '3400 North Charles Street, Baltimore, MD 21218'
+        
+    elif answers[0] == 'Peabody':
+        address = '1 E Mt Vernon Pl, Baltimore, MD 21202'
+        
+    elif answers[0] == 'Medical':
+        address = '733 N Broadway, Baltimore, MD 21205'
 
-    # enter the key words in search bar
-    search = 'jhu homewood restaurant' + ' ' + str(answers[0]) + ' ' + str(answers[1])
+    # locating the search bar
     loc_search_box = driver.find_element_by_name('q')
-    loc_search_box.send_keys(search)
+    # enter the keywords in search bar
+    loc_search_box.send_keys(address)
+    # click the search button
     loc_search_box.send_keys(Keys.ENTER)
-
+    
+    # sleep to mimic human activity
     sleep(3)
 
-    # click "more" from google results
-    wait.until(EC.element_to_be_clickable((
-        By.CLASS_NAME, 'MXl0lf.tKtwEb.wHYlTd')))
-    loc_more = driver.find_element_by_class_name('MXl0lf.tKtwEb.wHYlTd')
-    loc_more.click()
-
+    # click "restaurants" from Google results
+    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'uEubGf.gm2-subtitle-alt-2')))                         
+    restaurant = driver.find_element_by_class_name('uEubGf.gm2-subtitle-alt-2')
+    restaurant.click()
+    
+    # type cuisine type into Google search
+    wait.until(EC.element_to_be_clickable((By.NAME, 'q')))                        
+    box = driver.find_element_by_name('q')
+    box.click()
+    
+    # enter the keywords (user's input cuisine type) in search bar
+    box.send_keys(' ' + answers[1])
+    box.send_keys(Keys.ENTER)
+    
+    # wait until elements are clickable to fetch the restaurant names
+    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'qBF1Pd.gm2-subtitle-alt-1')))
     sleep(3)
+    res = driver.find_elements_by_class_name('qBF1Pd.gm2-subtitle-alt-1')
+    rating = driver.find_elements_by_class_name('ZkP5Je')
+    link = driver.find_elements_by_class_name('a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
 
-    # get the restaurant names
-    wait.until(EC.element_to_be_clickable((
-        By.CLASS_NAME, 'dbg0pd.OSrXXb.eDIkBe')))
-    names = driver.find_elements_by_class_name('dbg0pd.OSrXXb.eDIkBe')
     restaurants = []
-    for elem in names:
-        # convert WebElement to text and append to list
-        restaurants.append((elem.text))
+    ratings = []
+    
+    # get the restaurant names
+    # convert WebElement to str and append to list
+    restaurants = [(elem.text) for elem in res]
+    
+    # get the restaurant ratings 
+    # convert WebElement to str and append to list
+    # stripping away the number of ratings
+    # take the rating digits only
+    ratings = [(elem.text)[:3] for elem in rating] 
+        
+    # get the hyperlinks
+    links = [elem.get_attribute('href') for elem in link] 
 
-    return restaurants
+    # close Chrome    
+    driver.close()
+    
+    return restaurants, ratings, links
+
 
 
 if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
-    print(webscrape(ans))
+    print(webscrape(answers_given))
