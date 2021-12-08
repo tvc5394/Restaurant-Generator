@@ -17,7 +17,12 @@ answers_given = []
 
 
 class MyCommands(tk.Tk):
+    '''
+    This class stores and loads the pages for the tkinter program.
+    '''
+
     def __init__(self, *args, **kwargs):
+
         tk.Tk.__init__(self, *args, **kwargs)
         container = tk.Frame(self)
 
@@ -47,6 +52,12 @@ class MyCommands(tk.Tk):
 
 class StartPage(tk.Frame):
 
+    '''
+    This is the class corresponding to the first page of the program.
+    It displays a single button that, when clicked, uses show_frame function
+    to take the user to the Location page for the first question.
+    '''
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(
@@ -60,7 +71,17 @@ class StartPage(tk.Frame):
                            command=lambda: controller.show_frame(Location))
         button.pack()
 
+
 class Location(tk.Frame):
+
+    '''
+    This is the class corresponding to the second page of the program.
+    It asks the first question to the user. Displayed are 4 options for answers
+    and an exit button that closes out of the program w/o running any search.
+    Clicking the first three options leads to the Cuisine page.
+    Clicking the fourth option leads to a new page with a text box,
+    where user is prompted to enter in their desired address (EnterAddress).
+    '''
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -87,6 +108,11 @@ class Location(tk.Frame):
                           command=self.quit)
         btn_exit.pack(pady=10, padx=10)
 
+    '''
+    The following functions are called when user clicks the first 3 options.
+    They save the answer into the array "answers_given".
+    '''
+
     def btn_homewood_press(self):
         answers_given.append("Homewood")
         print(answers_given)
@@ -99,7 +125,19 @@ class Location(tk.Frame):
         answers_given.append("Medical")
         print(answers_given)
 
+
 class Cuisine(tk.Frame):
+
+    '''
+    This is the class corresponding to the third page of the program.
+    It asks the second question and displays 4 answer buttons
+    as well as the exit button.
+    An additional button here is the reset button,
+    which takes user back to StartPage.
+    All answers entered by the user are erased from the system
+    and the program starts from
+    scratch when the reset button is clicked.
+    '''
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -130,6 +168,11 @@ class Cuisine(tk.Frame):
                                             answers_given.clear()])
         btn_reset.pack(pady=10, padx=10)
 
+    '''
+    The following functions are called when user clicks the first 3 options.
+    They save the answer into the array "answers_given".
+    '''
+
     def btn_murica_press(self):
         answers_given.append("American")
         print(answers_given)
@@ -149,6 +192,14 @@ class Cuisine(tk.Frame):
 
 class EnterAddress(tk.Frame):
 
+    '''
+    This class corresponds with an alternative page of the program.
+    It is only called when the user (in question 1) answers that they want
+    to enter in an address.
+    The user types in an address and clicks the enter button,
+    which initiates the btn_add_press function.
+    '''
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Please enter a "
@@ -163,6 +214,11 @@ class EnterAddress(tk.Frame):
                                     controller.show_frame(Cuisine)])
         btn_address_enter.pack(pady=10, padx=10)
 
+    '''
+    This function saves the text entered by user into
+    "answers_given" in the correct format.
+    '''
+
     def btn_add_press(self, address_input):
         address_answer = address_input.get(1.0, "end")
         address_answer = address_answer.strip('\n')
@@ -171,10 +227,21 @@ class EnterAddress(tk.Frame):
 
 class Rating(tk.Frame):
 
+    '''
+    This is the class corresponding to the fourth page of the program.
+    This class asks the third (final) question & presents user with a text box
+    to enter in their rating.
+    The user is also presented with the same exit and reset buttons as before.
+    '''
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.label_error = tk.Label(self, text="Please enter a valid value.")
+        # The above (label_error) should be displayed ONLY when user enters:
+        # not a number (letters/punctuation/etc.) or leaves the textbox blank.
+        # We don't pack label_error so that it doesn't appear until
+        # the user makes that mistake.
         label = tk.Label(
             self, text="Question 3: What is the minimum Google reviews "
             "rating of your desired restaurant?")
@@ -189,6 +256,9 @@ class Rating(tk.Frame):
             self, text='Enter', bd='5',
             command=lambda: [self.label_error.pack_forget(),
                              self.btn_enter_press(rating_input)])
+        # The command to pack_forget the label_error is so that error doesn't
+        # keep displaying a ton of them one below the other
+        # each time user enters something invalid.
         btn_rating_enter.pack()
         btn_exit = Button(self, text='Exit', bd='5',
                           command=self.quit)
@@ -198,16 +268,29 @@ class Rating(tk.Frame):
                             answers_given.clear()])
         btn_reset.pack(pady=10, padx=10)
 
+    '''
+    This function checks what user entered into textbox to see if it's valid.
+    If not, it displays error message.
+    '''
+
     def btn_enter_press(self, rating_input):
         rating_answer = rating_input.get(1.0, "end")
         rating_answer = rating_answer.strip('\n')
         try:
             rating_answer = float(rating_answer)
+            # This checks to make sure that the text entered is a value.
         except ValueError:
+            # If it's not a value, then the program gets the ValueError error.
+            # To prevent the program from crashing and let user
+            # know their mistake,
+            # the program displays (ie. pack) the label_error.
             self.label_error.pack(pady=10, padx=10)
             rating_input.delete(1.0, "end")
+            # This line deletes whatever text the user entered into textbox.
         else:
             if rating_answer <= 5:
+                # if the answer is a number and below/equal to 5,
+                # then we save the answer into "answers_given".
                 answers_given.append(rating_answer)
                 print(answers_given)
                 self.controller.show_frame(EndPage)
@@ -215,9 +298,19 @@ class Rating(tk.Frame):
             else:
                 self.label_error.pack(pady=10, padx=10)
                 rating_input.delete(1.0, "end")
+                # again, if it is not valid,
+                # we clear the textbox and display error message.
 
 
 class EndPage(tk.Frame):
+
+    '''
+    This is the class corresponding to the last page of the program.
+    It lets the user know that the questions are done and prompts them to
+    click a button to submit answers and run the search.
+    The page that the user is taken to when clicking the button is Results page
+    # and that's where the answers are displayed.
+    '''
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -344,6 +437,13 @@ class EndPage(tk.Frame):
 
 
 class Results(tk.Frame):
+
+    '''
+    This is the class that corresponds to the Results page.
+    This displays the restaurants that the program found that fit
+    what the user entered in the questions.
+    '''
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="See your results below:")
@@ -357,4 +457,3 @@ if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
     print(self.webscrape(answers_given))
-
