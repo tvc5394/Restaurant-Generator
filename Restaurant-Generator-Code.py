@@ -31,7 +31,7 @@ class MyCommands(tk.Tk):
         self.frames = {}
 
         for F in (StartPage, Location, EnterAddress,
-                  Cuisine, Rating, EndPage, Results):
+                  Cuisine, Rating, EndPage, Results, LinkRedirect):
 
             frame = F(container, self)
 
@@ -58,10 +58,13 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(
-            self, text="Welcome to your Baltimore Restaurant Guide!")
+            self, text="Welcome to your Restaurant Guide ~")
         label.pack(pady=10, padx=10)
         label = tk.Label(
-            self, text="Find the restaurant that best caters your cravings!")
+            self, text="Find restaurants that cater to your cravings...")
+        label.pack(pady=10, padx=10)
+        label = tk.Label(
+            self, text="within or outside the Baltimore area!")
         label.pack(pady=10, padx=10)
 
         button = tk.Button(self, text="Let's Start!",
@@ -200,7 +203,7 @@ class EnterAddress(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Please enter a "
-                         " valid address/location/area name, "
+                         "valid address/location/area name, "
                          "similar to how you would in Google.", bd='5')
         label.pack(pady=10, padx=10)
         address_input = tk.Text(self, height=2, width=20)
@@ -404,16 +407,16 @@ class EndPage(tk.Frame):
 
         # get the restaurant names
         # convert WebElement to str and append to list
-        restaurants = [(elem.text) for elem in res]
+        restaurants = ([(elem.text) for elem in res])
 
         # get the restaurant ratings
         # convert WebElement to str and append to list
         # stripping away the number of ratings
         # take the rating digits only
-        ratings = [(elem.text)[:3] for elem in rating]
+        ratings = ([(elem.text)[:3] for elem in rating])
 
         # get the hyperlinks
-        links = [elem.get_attribute('href') for elem in link]
+        links = ([elem.get_attribute('href') for elem in link])
 
         # discard restaurants below a certain rating
         index = [i for i, v in enumerate(
@@ -439,7 +442,20 @@ class EndPage(tk.Frame):
                 + '\n' + 'Link: ' + links[i] + '\n')
 
         # return restaurants, ratings, links
-        Label(app, text=data).pack()
+        for i in range(len(restaurants)):
+            btn = tk.Button(
+                app, text=restaurants[i], command=controller.show_frame(LinkRedirect))
+            btn.pack(pady=10, padx=10)
+            label = tk.Label(app, text="Rating: " + ratings[i])
+            label.pack(pady=10, padx=10)
+
+
+class LinkRedirect(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        for 
+
 
 
 class Results(tk.Frame):
@@ -452,11 +468,13 @@ class Results(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="See your results below:")
-        label.pack(pady=10, padx=10)
-        btn_exit = Button(self, text='Exit', bd='5',
-                          command=self.quit)
-        btn_exit.pack(pady=10, padx=10)
+        label = tk.Label(self, text="Search Completed! "
+                         "See your results below. "
+                         "Click on each result to be redirected to the menu link.")
+        label.pack(pady=1, padx=1)
+        btn_exit = tk.Button(self, text='Exit', bd='5',
+                             command=self.quit)
+        btn_exit.pack(pady=1, padx=1)
 
 
 if __name__ == '__main__':
