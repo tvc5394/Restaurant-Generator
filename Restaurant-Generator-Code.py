@@ -430,7 +430,16 @@ class EndPage(tk.Frame):
         # close Chrome
         driver.close()
 
-        return restaurants, ratings, links
+        data = []
+        # put results into a tuple
+        for i in range(len(restaurants)):
+            data.append(
+                '\n' + 'Name: ' + restaurants[i]
+                + '\n' + 'Rating: ' + ratings[i]
+                + '\n' + 'Link: ' + links[i] + '\n')
+
+        # return restaurants, ratings, links
+        Label(app, text=data).pack()
 
 
 class Results(tk.Frame):
@@ -453,4 +462,3 @@ class Results(tk.Frame):
 if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
-    print(self.webscrape(answers_given))
