@@ -11,4 +11,5 @@ Notes:
 
 Credits:
 - Ceylin Elmasli (celm17) - completed the GUI portion of the code
+- Tina Chen (tvc5394) - completed the web scraping portion of the code
 - Divya Sharma (github username) - provided the Python knowledge and suggestions on ways to improve the code
