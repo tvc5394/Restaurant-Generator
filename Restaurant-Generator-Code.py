@@ -323,6 +323,7 @@ class EndPage(tk.Frame):
                                             self.webscrape(answers_given)])
         button.pack(pady=10, padx=10)
 
+    # updated 12/13
     def webscrape(self, answers_given):
         '''
         This function will open Chrome and search on Google Maps
@@ -404,19 +405,39 @@ class EndPage(tk.Frame):
         rating = driver.find_elements_by_class_name('ZkP5Je')
         link = driver.find_elements_by_class_name(
             'a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
+        trial = driver.find_elements_by_class_name('V0h1Ob-haAclf.OPZbO-KE6vqe.o0s21d-HiaYvf')
 
         # get the restaurant names
         # convert WebElement to str and append to list
-        restaurants = ([(elem.text) for elem in res])
+        restaurants = [(elem.text) for elem in res]
 
         # get the restaurant ratings
         # convert WebElement to str and append to list
         # stripping away the number of ratings
         # take the rating digits only
-        ratings = ([(elem.text)[:3] for elem in rating])
+        ratings = [(elem.text)[:3] for elem in rating]
 
         # get the hyperlinks
-        links = ([elem.get_attribute('href') for elem in link])
+        links = [elem.get_attribute('href') for elem in link]
+
+        # get the texts to check if it contains 'No review'
+        # because the list would miss an element and it would
+        # throw off an IndexError
+        texts = [elem.text for elem in trial]
+        
+        # looping to see if 'No reviews is in'
+        result = []
+        for term in texts:
+            ans = term.find('No reviews')
+            result.append(ans)
+
+        # get the index of the place with 'No reviews'
+        index = [i for i, val in enumerate(result) if val > -1]
+
+        # put 0.0 for the rating for the ones that does not have a review
+        for ind in index:
+            ratings.insert(ind, '0.0')
+        print(ratings)
 
         # discard restaurants below a certain rating
         index = [i for i, v in enumerate(
@@ -441,7 +462,7 @@ class EndPage(tk.Frame):
                 + '\n' + 'Rating: ' + ratings[i]
                 + '\n' + 'Link: ' + links[i] + '\n')
 
-        # return restaurants, ratings, links
+        # Label(app, text=data).pack()
         for i in range(len(restaurants)):
             btn = tk.Button(
                 app, text=restaurants[i], command=controller.show_frame(LinkRedirect))
