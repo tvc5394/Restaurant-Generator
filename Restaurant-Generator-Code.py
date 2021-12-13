@@ -437,7 +437,6 @@ class EndPage(tk.Frame):
         # put 0.0 for the rating for the ones that does not have a review
         for ind in index:
             ratings.insert(ind, '0.0')
-        print(ratings)
 
         # discard restaurants below a certain rating
         index = [i for i, v in enumerate(
