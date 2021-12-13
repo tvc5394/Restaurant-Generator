@@ -10,5 +10,5 @@ Notes:
 - Please note that we set the restaurant rating to 0 if it has no reviews on Google.
 
 Credits:
-Ceylin Elmasli (celm17) - completed the GUI portion of the code
-Divya Sharma (github username) - provided the Python knowledge and suggestions on ways to improve the code
+- Ceylin Elmasli (celm17) - completed the GUI portion of the code
+- Divya Sharma (github username) - provided the Python knowledge and suggestions on ways to improve the code
