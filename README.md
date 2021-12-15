@@ -13,4 +13,4 @@ It was 4 pm on a Wednesday, and we had to figure out our Python project proposal
 **Credits:**
 - Ceylin Elmasli (celm17) - completed the GUI portion of the code
 - Tina Chen (tvc5394) - completed the web scraping portion of the code
-- Divya Sharma (github username) - provided the Python knowledge and expertise
+- Divya Sharma (sh-divya) - provided the Python knowledge and expertise
