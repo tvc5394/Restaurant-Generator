@@ -32,6 +32,7 @@ class MyCommands(tk.Tk):
 
         for F in (StartPage, Location, EnterAddress,
                   Cuisine, Rating, EndPage, Results, LinkRedirect):
+            # looping thru diff. classes, stored pages of program
 
             frame = F(container, self)
 
@@ -43,6 +44,8 @@ class MyCommands(tk.Tk):
 
     def show_frame(self, cont):
 
+        # Call this function when we want to switch between pages
+
         frame = self.frames[cont]
         frame.tkraise()
 
@@ -53,6 +56,10 @@ class StartPage(tk.Frame):
     This is the class corresponding to the first page of the program.
     It displays a single button that, when clicked, uses show_frame function
     to take the user to the Location page for the first question.
+
+    ** Inputs **
+
+    parent: 
     '''
 
     def __init__(self, parent, controller):
@@ -314,6 +321,7 @@ class EndPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller
         label = tk.Label(
             self, text="Thank you for answering the questions. "
             "Click below to submit.")
@@ -513,3 +521,4 @@ class Results(tk.Frame):
 if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
+    
