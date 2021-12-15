@@ -405,7 +405,8 @@ class EndPage(tk.Frame):
         rating = driver.find_elements_by_class_name('ZkP5Je')
         link = driver.find_elements_by_class_name(
             'a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
-        trial = driver.find_elements_by_class_name('V0h1Ob-haAclf.OPZbO-KE6vqe.o0s21d-HiaYvf')
+        trial = driver.find_elements_by_class_name(
+            'V0h1Ob-haAclf.OPZbO-KE6vqe.o0s21d-HiaYvf')
 
         # get the restaurant names
         # convert WebElement to str and append to list
@@ -424,7 +425,7 @@ class EndPage(tk.Frame):
         # because the list would miss an element and it would
         # throw off an IndexError
         texts = [elem.text for elem in trial]
-        
+
         # looping to see if 'No reviews is in'
         result = []
         for term in texts:
@@ -461,21 +462,33 @@ class EndPage(tk.Frame):
                 + '\n' + 'Rating: ' + ratings[i]
                 + '\n' + 'Link: ' + links[i] + '\n')
 
-        # Label(app, text=data).pack()
         for i in range(len(restaurants)):
+            name = restaurants[i]
             btn = tk.Button(
-                app, text=restaurants[i], command=controller.show_frame(LinkRedirect))
+                app, text=restaurants[i])
+            btn.config(
+                command=lambda t=restaurants[i], l=link[i]: self.select_restaurant(t, l))
             btn.pack(pady=10, padx=10)
             label = tk.Label(app, text="Rating: " + ratings[i])
             label.pack(pady=10, padx=10)
+
+    def select_restaurant(self, text, link):
+        self.controller.frames[LinkRedirect].change_label_text(text, link)
+        self.controller.show_frame(LinkRedirect)
 
 
 class LinkRedirect(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        for 
+        self.restaurant = tk.Label(self, text='')
+        self.restaurant.pack(pady=10, padx=10)
+        self.link = tk.Label(self, text='')
+        self.link.pack(pady=10, padx=10)
 
+    def change_label_text(self, title, link):
+        self.restaurant.config(text='Visit ' + title + 'at\n')
+        self.link.config(text=link)
 
 
 class Results(tk.Frame):
