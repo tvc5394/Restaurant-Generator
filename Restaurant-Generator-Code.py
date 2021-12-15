@@ -397,12 +397,7 @@ class EndPage(tk.Frame):
                 Third str: the minimum value of rating the restaurant
                 needs to have
         **Returns**
-            restaurants: *list
-                A list of all the restaurants found
-            ratings: *list
-                A list of the ratings for each restaurant
-            links: *list
-                A list of the hyperlinks of each restaurant
+            A GUI with buttons of restaurant names and their ratings (in texts)
         '''
 
         # open Google Maps with Chrome driver
@@ -434,7 +429,7 @@ class EndPage(tk.Frame):
             address = answers_given[0]
 
         # locating the search bar
-        loc_search_box = driver.find_element_by_name('q')
+        loc_search_box = driver.find_element(By.NAME, 'q')
         # enter the keywords in search bar
         loc_search_box.send_keys(address)
         # click the search button
@@ -446,13 +441,13 @@ class EndPage(tk.Frame):
         # click "restaurants" from Google results
         wait.until(EC.element_to_be_clickable(
             (By.CLASS_NAME, 'uEubGf.gm2-subtitle-alt-2')))
-        restaurant = driver.find_element_by_class_name(
-            'uEubGf.gm2-subtitle-alt-2')
+        restaurant = driver.find_element(By.CLASS_NAME,
+                                         'uEubGf.gm2-subtitle-alt-2')
         restaurant.click()
 
         # type cuisine type into Google search
         wait.until(EC.element_to_be_clickable((By.NAME, 'q')))
-        box = driver.find_element_by_name('q')
+        box = driver.find_element(By.NAME, 'q')
         box.click()
 
         # enter the keywords (user's input cuisine type) in search bar
@@ -463,12 +458,13 @@ class EndPage(tk.Frame):
         wait.until(EC.element_to_be_clickable(
             (By.CLASS_NAME, 'qBF1Pd.gm2-subtitle-alt-1')))
         sleep(3)
-        res = driver.find_elements_by_class_name('qBF1Pd.gm2-subtitle-alt-1')
-        rating = driver.find_elements_by_class_name('ZkP5Je')
-        link = driver.find_elements_by_class_name(
-            'a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
-        trial = driver.find_elements_by_class_name(
-            'V0h1Ob-haAclf.OPZbO-KE6vqe.o0s21d-HiaYvf')
+        res = driver.find_elements(By.CLASS_NAME, 'qBF1Pd.gm2-subtitle-alt-1')
+        rating = driver.find_elements(By.CLASS_NAME, 'ZkP5Je')
+        link = driver.find_elements(By.CLASS_NAME,
+                                    'a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
+        trial = driver.find_elements(By.CLASS_NAME,
+                                     'V0h1Ob-haAclf.OPZbO-KE6vqe.o0s21d-HiaYvf'
+                                     )
 
         # get the restaurant names
         # convert WebElement to str and append to list
@@ -529,13 +525,13 @@ class EndPage(tk.Frame):
                 app, text=restaurants[i])
             btn.config(
                 command=lambda t=restaurants[i],
-                l=link[i]: self.select_restaurant(t, l))
+                l=links[i]: self.select_restaurant(t, l))
             btn.pack(pady=10, padx=10)
             label = tk.Label(app, text="Rating: " + ratings[i])
             label.pack(pady=10, padx=10)
 
-    def select_restaurant(self, text, link):
-        self.controller.frames[LinkRedirect].change_label_text(text, link)
+    def select_restaurant(self, text, links):
+        self.controller.frames[LinkRedirect].change_label_text(text, links)
         self.controller.show_frame(LinkRedirect)
 
 
@@ -545,12 +541,12 @@ class LinkRedirect(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.restaurant = tk.Label(self, text='')
         self.restaurant.pack(pady=10, padx=10)
-        self.link = tk.Label(self, text='')
-        self.link.pack(pady=10, padx=10)
+        self.links = tk.Label(self, text='')
+        self.links.pack(pady=10, padx=10)
 
-    def change_label_text(self, title, link):
+    def change_label_text(self, title, links):
         self.restaurant.config(text='Visit ' + title + 'at\n')
-        self.link.config(text=link)
+        self.links.config(text=links)
 
 
 class Results(tk.Frame):
