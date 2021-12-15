@@ -512,40 +512,50 @@ class EndPage(tk.Frame):
         # close Chrome
         driver.close()
 
-        data = []
-        # put results into a tuple
-        for i in range(len(restaurants)):
-            data.append(
-                '\n' + 'Name: ' + restaurants[i]
-                + '\n' + 'Rating: ' + ratings[i]
-                + '\n' + 'Link: ' + links[i] + '\n')
-
         for i in range(len(restaurants)):
             btn = tk.Button(
                 app, text=restaurants[i])
             btn.config(
                 command=lambda t=restaurants[i],
-                l=links[i]: self.select_restaurant(t, l))
-            btn.pack(pady=10, padx=10)
+                l=links[i]: self.select_restaurant(l))
+            btn.pack()
             label = tk.Label(app, text="Rating: " + ratings[i])
-            label.pack(pady=10, padx=10)
+            label.pack()
 
-    def select_restaurant(self, text, links):
-        self.controller.frames[LinkRedirect].change_label_text(text, links)
+    def select_restaurant(self, links):
+        self.controller.frames[LinkRedirect].change_label_text(links)
         self.controller.show_frame(LinkRedirect)
 
 
 class LinkRedirect(tk.Frame):
 
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.restaurant = tk.Label(self, text='')
-        self.restaurant.pack(pady=10, padx=10)
-        self.links = tk.Label(self, text='')
-        self.links.pack(pady=10, padx=10)
+    '''
+    This class will display the link for the restaurant website.
+    '''
 
-    def change_label_text(self, title, links):
-        self.restaurant.config(text='Visit ' + title + 'at\n')
+    def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
+
+        tk.Frame.__init__(self, parent)
+        self.links = tk.Label(self, text='')
+        self.links.pack()
+
+    def change_label_text(self, links):
+        '''
+        This function will display the link to the restaurant website.
+        ** Inputs **
+        self: current object
+        links: text, link to the restaurant
+        '''
+
         self.links.config(text=links)
 
 
@@ -571,10 +581,10 @@ class Results(tk.Frame):
         label = tk.Label(self, text="Search Completed! "
                          "See your results below. "
                          "Click on each result to display restaurant link.")
-        label.pack(pady=1, padx=1)
+        label.pack()
         btn_exit = tk.Button(self, text='Exit', bd='5',
                              command=self.quit)
-        btn_exit.pack(pady=1, padx=1)
+        btn_exit.pack()
 
 
 if __name__ == '__main__':
