@@ -56,13 +56,19 @@ class StartPage(tk.Frame):
     This is the class corresponding to the first page of the program.
     It displays a single button that, when clicked, uses show_frame function
     to take the user to the Location page for the first question.
-
-    ** Inputs **
-
-    parent: 
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
+
         tk.Frame.__init__(self, parent)
         label = tk.Label(
             self, text="Welcome to your Restaurant Guide ~")
@@ -91,6 +97,16 @@ class Location(tk.Frame):
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
+
         tk.Frame.__init__(self, parent)
         label = tk.Label(
             self, text="Question 1: Which JHU campus are you closest to?")
@@ -147,6 +163,16 @@ class Cuisine(tk.Frame):
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
+
         tk.Frame.__init__(self, parent)
         label = tk.Label(
             self, text="Question 2: Which regional cousine would you like?")
@@ -208,6 +234,16 @@ class EnterAddress(tk.Frame):
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
+
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Please enter a "
                          "valid address/location/area name, "
@@ -242,6 +278,16 @@ class Rating(tk.Frame):
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
+
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.label_error = tk.Label(self, text="Please enter a valid value.")
@@ -320,6 +366,15 @@ class EndPage(tk.Frame):
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(
@@ -331,7 +386,6 @@ class EndPage(tk.Frame):
                                             self.webscrape(answers_given)])
         button.pack(pady=10, padx=10)
 
-    # updated 12/13
     def webscrape(self, answers_given):
         '''
         This function will open Chrome and search on Google Maps
@@ -471,11 +525,11 @@ class EndPage(tk.Frame):
                 + '\n' + 'Link: ' + links[i] + '\n')
 
         for i in range(len(restaurants)):
-            name = restaurants[i]
             btn = tk.Button(
                 app, text=restaurants[i])
             btn.config(
-                command=lambda t=restaurants[i], l=link[i]: self.select_restaurant(t, l))
+                command=lambda t=restaurants[i],
+                l=link[i]: self.select_restaurant(t, l))
             btn.pack(pady=10, padx=10)
             label = tk.Label(app, text="Rating: " + ratings[i])
             label.pack(pady=10, padx=10)
@@ -508,10 +562,19 @@ class Results(tk.Frame):
     '''
 
     def __init__(self, parent, controller):
+        '''
+        ** Inputs **
+        self: current object
+        parent: widget, parent of the current object (self)
+        controller: object that allows pages of widget
+        to interact w/ one another.
+            For example, show_frame is defined in separate class and controller
+            allows us to access that class from other classes.
+        '''
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Search Completed! "
                          "See your results below. "
-                         "Click on each result to be redirected to the menu link.")
+                         "Click on each result to display restaurant link.")
         label.pack(pady=1, padx=1)
         btn_exit = tk.Button(self, text='Exit', bd='5',
                              command=self.quit)
@@ -521,4 +584,3 @@ class Results(tk.Frame):
 if __name__ == '__main__':
     app = MyCommands()
     app.mainloop()
-    
