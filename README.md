@@ -3,7 +3,7 @@ Are you having a difficult time figuring out where to eat for your next meal? Lo
 
 **Motivation:**
 
-It was 4 pm on a Wednesday, and we had to figure out our Python project proposal before leaving the classroom. What is a problem we both want to resolve that can be done with Python? Ugh, we don't know. All we know is that we want to get this done and leave for food.
+It was 4 pm on a Wednesday, and we had to figure out our Python project proposal before leaving the classroom. What is a problem we both want to solve that can be done with Python? Ugh, we don't know. All we know is that we want to get this done and leave for food.
 
 Hmmm, what kind of food should we get later?
 
