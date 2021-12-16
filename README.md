@@ -16,6 +16,6 @@ Oh, wait! Let's make a restaurant generator to see what are the available restau
 - Please note that there are no unittests.py files in our repository as the Google results tend to vary with each run.
 
 **Credits:**
-- Ceylin Elmasli (celm17) - completed the GUI portion of the code
+- Ceylin Elmasli (celm17) - completed the GUI (tkinter) portion of the code
 - Tina Chen (tvc5394) - completed the web scraping portion of the code
 - Divya Sharma (sh-divya) - provided the Python knowledge and expertise
